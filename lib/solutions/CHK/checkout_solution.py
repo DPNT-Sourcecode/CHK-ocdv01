@@ -91,6 +91,7 @@ def _extract_price(item, amount) -> int:
     # Find best offer for a particular amount:
     def __best_offer(item, total_amount):
         best_offer = None
+        remaining_amount = total_amount
         offers = [offer for offer in SINGLE_OFFERS if offer.item == item and offer.amount < total_amount]
         
         if offers != []:
@@ -103,8 +104,9 @@ def _extract_price(item, amount) -> int:
                         offer.amount > best_offer.amount
                         ):
                         best_offer = offer
-
-        return best_offer
+        
+        			remaining_after_current_best = remaining_amount - best_offer.amount
+        return best_offer, remaining_amount
 
     discounted_price = 0
     if (offer := __best_offer(item, amount)):
@@ -141,6 +143,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
