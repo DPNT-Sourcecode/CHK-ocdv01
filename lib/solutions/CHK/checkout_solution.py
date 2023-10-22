@@ -44,11 +44,28 @@ def checkout(skus):
     """
     total_price = 0
     item_counter = Counter(skus)
+    breakpoint()
+    
+    def _apply_whole_cart_offers(item_counter):
+        """
+        Offer can work N times
+        _apply_whole_cart_offers(Counter({'E': 4, 'B': 2}))
+        """
+        for item in item_counter:
+            for offer in WHOLE_OFFERS:
+                if item == offer.item and offer.free_item in item_counter:
+                    n_discounted_items = floor(item.amount / offer.amount)
+                    item_counter[offer.free_item] -= offer.amount
+        return item_counter
+
+    _apply_whole_cart_offers(item_counter)
+
     try:
         for item in item_counter:
             for offer in WHOLE_OFFERS:
                 if item == offer.item and offer.free_item in item_counter:
                     # depending on how many
+                    pass
                 
 
             total_price += _extract_price(item, item_counter[item])
@@ -93,5 +110,6 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
