@@ -127,7 +127,7 @@ def checkout(skus):
         if item not in AVAILABLE_ITEMS.keys():
             return -1
         
-    # item_counter = _apply_special_cart_offers(item_counter)
+    item_counter = _apply_special_cart_offers(item_counter)
     item_counter = _apply_whole_cart_offers(item_counter)
 
     for item in item_counter:
@@ -255,7 +255,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     """
     Removes items in sets of 3 if they are inside SPECIAL_OFFER_ITEMS
     >>> _apply_special_cart_offers(Counter({'X': 3, 'Y': 2, 'Z': 3}))
-    (Counter({'X': 2}), 90)
+    (Counter({'X': 2, 'Y': 0, 'Z': 0}}), 90)
 
     >>> _apply_special_cart_offers(Counter({'Z': 2, 'A': 1}))
     (Counter({'Z': 2, 'A': 1}), 0)
@@ -270,6 +270,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
         item_counter["Y"] +
         item_counter["Z"] 
     )
+    breakpoint()
     original_total = total_relevant_items
     
     # Return immediately if too few items
@@ -277,13 +278,11 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
         return item_counter, special_offer_costs
 
     def discount_total_relevant_items(item_counter, priority, total_relevant_items, leftover_discounts=3):
-        possible_discounts = floor(total_relevant_items / 3)
-        applied_discounts = 0
+        applied_discounts = 3 - leftover_discounts
         
         for item_label in SPECIAL_DISCOUNT_PRIORITY[priority]:
             if item_label in item_counter:
-                while (item_counter[item_label] > 0) and possible_discounts > 0:
-                    print(f"Discounting {item_label}")
+                while (item_counter[item_label] > 0) and applied_discounts < 3:
                     item_counter[item_label] -= 1
                     applied_discounts += 1
                     total_relevant_items -= 1
@@ -310,10 +309,3 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
-
-
-
-
-
-
-
