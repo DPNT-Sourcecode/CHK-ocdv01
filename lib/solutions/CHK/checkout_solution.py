@@ -277,19 +277,18 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
         return item_counter, special_offer_costs
 
     def discount_total_relevant_items(item_counter, priority, total_relevant_items):
-        applied_discounts = 3
-        for item_label in item_counter:
-            if (item_label in SPECIAL_DISCOUNT_PRIORITY[priority] and 
-                item_counter[item_label] > 0
-                ):
-                while applied_discounts > 0 and item_counter[item_label] > 0:
+        possible_discounts = total_relevant_items / 3
+        new_total_relevant = total_relevant_items
+
+        for item_label in SPECIAL_DISCOUNT_PRIORITY[priority]:
+            if (item_counter[item_label] > 0):
+                while possible_discounts > 0 and item_counter[item_label] > 0:
                     print(f"Discounting {item_label}")
                     item_counter[item_label] -= 1
-                    total_relevant_items -= 1
-                    applied_discounts -= 1
+                    new_total_relevant -= 1
         
-            if total_relevant_items < 3:
-                break
+            if (total_relevant_items - new_total_relevant) == 3:
+                possible_discounts -= 1
 
 
         return (item_counter, total_relevant_items)
@@ -307,5 +306,6 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
