@@ -96,13 +96,16 @@ def _extract_price(item, amount) -> int:
                     best_offer = offer
                 
                 else:
-                    if offer.amount > best_offer.amount and offer.amount > total_amount:
+                    if (
+                        offer.amount > best_offer.amount and 
+                        total_amount >= offer.amount
+                        ):
                         best_offer = offer
 
         return best_offer
 
     discounted_price = 0
-    if (offer := __best_offer(item)):
+    if (offer := __best_offer(item, amount)):
         if item == offer.item:
             if amount >= offer.amount:
                 # Divide to find out how many offers are possible
@@ -136,4 +139,5 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
