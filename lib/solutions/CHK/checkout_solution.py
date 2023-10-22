@@ -16,12 +16,15 @@ offer1 = OFFERS("A", 3, 130)
 offer2 = OFFERS("B", 2, 45)
 offer3 = OFFERS("A", 5, 200)
 
-SINGLE_OFFERS = [offer3, offer2, offer1]
 
-WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item"])
-offer4 = WHOLE_CART_OFFERS("E", 2, "B")
-offer5 = WHOLE_CART_OFFERS("F", 2, "F")
-WHOLE_OFFERS = [offer4]
+WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item", "min_same_item"])
+offer4 = WHOLE_CART_OFFERS("E", 2, "B", 2)
+offer5 = WHOLE_CART_OFFERS("F", 2, "F", 3)
+
+
+# APPEND OFFERS HERE
+SINGLE_OFFERS = [offer3, offer2, offer1]
+WHOLE_OFFERS = [offer4, offer5]
 
 
 # noinspection PyUnusedLocal
@@ -149,18 +152,25 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
     Discounts Fs correctly
     >>> _apply_whole_cart_offers(Counter({'F': 3}))
     Counter({'F': 2})
+
+    Does not discount from 2 Fs:
+    >>> _apply_whole_cart_offers(Counter({'F': 2}))
+    Counter({'F': 2})
+
     """
     for item_in_cart in item_counter:
         for offer in WHOLE_OFFERS:
             if item_in_cart == offer.item and offer.free_item in item_counter:
-                n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
+                if offer.min_same_item < item_counter[item_in_cart]:
+                    n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
 
-                if n_discounted_items > item_counter[offer.free_item]:
-                    item_counter[offer.free_item] = 0
-                else:
-                    item_counter[offer.free_item] -= n_discounted_items
+                    if n_discounted_items >= item_counter[offer.free_item]:
+                        item_counter[offer.free_item] = 0
+                    else:
+                        item_counter[offer.free_item] -= n_discounted_items
     return item_counter
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
