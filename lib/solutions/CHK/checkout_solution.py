@@ -165,22 +165,20 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
     for item_in_cart in item_counter:
         for offer in WHOLE_OFFERS:
             if item_in_cart == offer.item and offer.free_item in item_counter:
-                # Handles same-item offers by updating
-                if offer.min_same_item <= item_counter[item_in_cart]:
-                    n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
-
-                    if n_discounted_items >= item_counter[offer.free_item]:
-                        item_counter[offer.free_item] = 0
-                    else:
-                        item_counter[offer.free_item] -= n_discounted_items
                 
-                if item
+                if offer.item != offer.free_item:
+                    # Handles same-item offers by updating
+                    n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
+                else:
+                    n_discounted_items = floor(item_counter[item_in_cart] / offer.amount )
+
+                if n_discounted_items >= item_counter[offer.free_item]:
+                    item_counter[offer.free_item] = 0
+                else:
+                    item_counter[offer.free_item] -= n_discounted_items
+                    
+
     return item_counter
 
 if __name__ == "__main__":
     checkout("A B B A A A")
-
-
-
-
-
