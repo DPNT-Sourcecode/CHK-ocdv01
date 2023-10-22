@@ -7,6 +7,7 @@ AVAILABLE_ITEMS = {
     "C": 20,
     "D": 15,
     "E": 40,
+    "F": 10,
 }
 
 OFFERS = namedtuple("OFFERS",["item", "amount", "new_price"])
@@ -18,8 +19,9 @@ offer3 = OFFERS("A", 5, 200)
 SINGLE_OFFERS = [offer3, offer2, offer1]
 
 WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item"])
-offer3 = WHOLE_CART_OFFERS("E", 2, "B")
-WHOLE_OFFERS = [offer3]
+offer4 = WHOLE_CART_OFFERS("E", 2, "B")
+offer5 = WHOLE_CART_OFFERS("F", 2, "F")
+WHOLE_OFFERS = [offer4]
 
 
 # noinspection PyUnusedLocal
@@ -43,8 +45,13 @@ def checkout(skus):
     >>> checkout("EEEEBB")
     160
 
+	Complex multioffer
     >>> checkout("AAAAAEEBAAABB")
     455
+
+	Complex multioffer + 3 Fs - 2 should be paid for
+    >>> checkout("AAAAAEEBAAABBFFF")
+    475
     """
     total_price = 0
     item_counter = Counter(skus)
@@ -138,6 +145,10 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 	Does not go below 0
     >>> _apply_whole_cart_offers(Counter({'E': 4, 'B': 1}))
     Counter({'E': 4, 'B': 0})
+
+    Discounts Fs correctly
+    >>> _apply_whole_cart_offers(Counter({'F': 3}))
+    Counter({'F': 2})
     """
     for item_in_cart in item_counter:
         for offer in WHOLE_OFFERS:
@@ -152,3 +163,4 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
