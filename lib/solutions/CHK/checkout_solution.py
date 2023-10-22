@@ -54,7 +54,7 @@ offeru = WHOLE_CART_OFFERS("U", 3, "U", 1)
 
 
 # APPEND OFFERS HERE
-SINGLE_OFFERS = [offer3, offer2, offer1, offerh, offerh2, offerp, offerq, offerv2, offerk]
+SINGLE_OFFERS = [offer3, offer2, offer1, offerh, offerh2, offerp, offerq, offerv2, offerv, offerk]
 WHOLE_OFFERS = [offer4, offer5, offern, offerr, offeru]
 
 
@@ -239,6 +239,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
