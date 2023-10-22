@@ -37,6 +37,7 @@ offer1 = OFFERS("A", 3, 130)
 offer2 = OFFERS("B", 2, 45)
 offer3 = OFFERS("A", 5, 200)
 offerh = OFFERS("H", 5, 45)
+offerk = OFFERS("K", 2, 150)
 offerh2 = OFFERS("H", 10, 80)
 offerp = OFFERS("P", 5, 200)
 offerq = OFFERS("Q", 3, 80)
@@ -47,13 +48,13 @@ offerv2 = OFFERS("V", 3, 130)
 WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item", "min_same_item"])
 offer4 = WHOLE_CART_OFFERS("E", 2, "B", 0)
 offer5 = WHOLE_CART_OFFERS("F", 2, "F", 1)
-offern = WHOLE_CART_OFFERS("N", 3, "M", 0)
+offern = WHOLE_CART_OFFERS("N", 3, "M", 1)
 offerr = WHOLE_CART_OFFERS("R", 3, "Q", 0)
 offeru = WHOLE_CART_OFFERS("U", 3, "U", 1)
 
 
 # APPEND OFFERS HERE
-SINGLE_OFFERS = [offer3, offer2, offer1, offerh, offerh2, offerp, offerq, offerv2]
+SINGLE_OFFERS = [offer3, offer2, offer1, offerh, offerh2, offerp, offerq, offerv2, offerk]
 WHOLE_OFFERS = [offer4, offer5, offern, offerr, offeru]
 
 
@@ -86,25 +87,24 @@ def checkout(skus):
     >>> checkout("AAAAAEEBAAABBFFF")
     475
 
-    | H    | 10    | 5H for 45, 10H for 80  |
-| K    | 80    | 2K for 150             |
-| N    | 40    | 3N get one M free      |
-| P    | 50    | 5P for 200             |
-| Q    | 30    | 3Q for 80              |
-| R    | 50    | 3R get one Q free      |
-| U    | 40    | 3U get one U free      |
-| V    | 50    | 2V for 90, 3V for 130  |
-
     New offers work
     >>> checkout("KK")
     150
 
     >>> checkout("KKNNNM")
-    230
+    270
 
     >>> checkout("KKNNNMM")
-    245
+    285
 
+    >>> checkout("KKNNNMM")
+    285
+
+    >>> checkout("UUUU")
+    120
+
+    >>> checkout("VVVVV")
+    220
 
     """
     total_price = 0
@@ -239,5 +239,6 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
