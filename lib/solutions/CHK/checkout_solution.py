@@ -29,8 +29,18 @@ def _extract_price(item, amount) -> int:
     """
     Returns price for a given item in a given amount
     
+    Some random item is correct
     >>> _extract_price("A", 2)
     100
+
+    Offers work
+    >>> _extract_price("A", 3)
+    130
+
+    Offers with remainders work
+    >>> _extract_price("A", 4)
+    180
+
     """
     if item not in AVAILABLE_ITEMS.keys():
         return -1
@@ -50,4 +60,5 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
