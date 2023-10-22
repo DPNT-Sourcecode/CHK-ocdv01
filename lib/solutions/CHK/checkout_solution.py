@@ -80,7 +80,25 @@ def _find_best_offer(item, total_amount):
     
     return best_offer
 
-def __find_all_posible_offers(item, total_amount):
+def find_all_possible_offers(item, total_amount):
+    """
+    >>> find_all_possible_offers("A", 8)
+    [
+        OFFERS(item='A', amount=5, new_price=200),
+        OFFERS(item='A', amount=3, new_price=130)
+    ]
+    """
+    offers = []
+    while total_amount > 0:
+        offer = _find_best_offer(item,total_amount)
+        if offer != None:
+            offers.append(offer)
+            total_amount -= offer.amount
+
+    return offers
+
+
+
     pass
 
 def _extract_price(item, amount) -> int:
@@ -141,11 +159,3 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
-
-
-
-
-
-
-
-
