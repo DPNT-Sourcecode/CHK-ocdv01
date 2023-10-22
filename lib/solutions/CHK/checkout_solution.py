@@ -34,16 +34,22 @@ def checkout(skus):
     >>> checkout("ABCa")
     -1
 
-    Offers with remainders work
+    Offers from whole cart work
     >>> checkout("EEB")
     80
-    180
+
+    Discount twice at whole cart level
+    >>> checkout("EEEEBB")
+    160
     """
     total_price = 0
     item_counter = Counter(skus)
     try:
         for item in item_counter:
-            if item in WHOLE_OFFERS:
+            for offer in WHOLE_OFFERS:
+                if item == offer.item and offer.free_item in item_counter:
+                    # depending on how many
+                
 
             total_price += _extract_price(item, item_counter[item])
 
@@ -87,4 +93,5 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
