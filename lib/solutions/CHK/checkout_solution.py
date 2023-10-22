@@ -18,8 +18,8 @@ offer3 = OFFERS("A", 5, 200)
 
 
 WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item", "min_same_item"])
-offer4 = WHOLE_CART_OFFERS("E", 2, "B", 2)
-offer5 = WHOLE_CART_OFFERS("F", 2, "F", 3)
+offer4 = WHOLE_CART_OFFERS("E", 2, "B", 0)
+offer5 = WHOLE_CART_OFFERS("F", 2, "F", 1)
 
 
 # APPEND OFFERS HERE
@@ -173,10 +173,13 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
                         item_counter[offer.free_item] = 0
                     else:
                         item_counter[offer.free_item] -= n_discounted_items
+                
+                if item
     return item_counter
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
