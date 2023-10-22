@@ -271,6 +271,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
         item_counter["Y"] +
         item_counter["Z"] 
     )
+    original_total = total_relevant_items
     
     # Return immediately if too few items
     if total_relevant_items < 3:
@@ -283,8 +284,11 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
                     item_label in SPECIAL_OFFERS_ITEMS and
                     item_counter[item_label] > 0
                     ):
+                    print(f"Discounting {item_label}")
                     item_counter[item_label] -= 1
                     total_relevant_items -= 1
+
+    special_offer_costs = (original_total - total_relevant_items) * 45
 
     return (item_counter, special_offer_costs)
 
@@ -295,6 +299,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
