@@ -160,6 +160,11 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 	4 Fs
     >>> _apply_whole_cart_offers(Counter({'F': 4}))
     Counter({'F': 3})
+
+
+	6 Fs
+    >>> _apply_whole_cart_offers(Counter({'F': 6}))
+    Counter({'F': 4})
     """
 
     for item_in_cart in item_counter:
@@ -170,7 +175,8 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
                     # Handles same-item offers by updating
                     n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
                 else:
-                    n_discounted_items = floor(item_counter[item_in_cart] / offer.amount )
+                    items_for_promotion = item_counter[item_in_cart] - 1
+                    n_discounted_items = floor(items_for_promotion / offer.amount )
 
                 if n_discounted_items >= item_counter[offer.free_item]:
                     item_counter[offer.free_item] = 0
