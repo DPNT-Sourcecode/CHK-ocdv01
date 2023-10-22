@@ -23,13 +23,20 @@ def checkout(skus):
 
     >>> checkout("AABA")
     160
+
+    Should break
+    >>> checkout("ABCa")
+    -1
     """
     total_price = 0
     item_counter = Counter(skus)
-    for item in item_counter:
-        total_price += _extract_price(item, item_counter[item])
+    try:
+        for item in item_counter:
+            total_price += _extract_price(item, item_counter[item])
 
-    return total_price
+        return total_price
+    except ValueError:
+        return -1
         
 
 def _extract_price(item, amount) -> int:
@@ -50,7 +57,7 @@ def _extract_price(item, amount) -> int:
 
     """
     if item not in AVAILABLE_ITEMS.keys():
-        return -1
+        raise ValueError("Item not available, breaking cart")
     
     discounted_price = 0
     for offer in ALL_OFFERS:
@@ -67,6 +74,7 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
