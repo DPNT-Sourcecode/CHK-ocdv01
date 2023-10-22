@@ -60,7 +60,6 @@ offerr = WHOLE_CART_OFFERS("R", 3, "Q")
 offeru = WHOLE_CART_OFFERS("U", 3, "U")
 
 
-SPECIAL_OFFERS_ITEMS = {"S", "T", "X", "Y", "Z"}
 SPECIAL_DISCOUNT_PRIORITY = {
     "top": {"Z"}, 
     "medium": {"S", "T", "Y"},
@@ -281,14 +280,14 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     while total_relevant_items >= 3:
         # For each of the priorities
         for priority in ["top"]:
+            item_counter, total_relevant_items = discount_total_relevant_items(item_counter, priority)
 
-            def discount_total_relevant_items(item_counter, priority):
+            def discount_total_relevant_items(item_counter, priority, total_relevant_items):
                 for item_label in item_counter:
                     if (item_label in SPECIAL_DISCOUNT_PRIORITY[priority] and 
-                        item_label in SPECIAL_OFFERS_ITEMS and
                         item_counter[item_label] > 0
                         ):
-                        print(f"Discounting {item_label}")
+                        print(f"Discounting {num_discounts} {item_label}")
                         item_counter[item_label] -= 1
                         total_relevant_items -= 1
 
@@ -303,9 +302,3 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
-
-
-
-
-
-
