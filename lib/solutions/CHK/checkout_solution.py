@@ -80,13 +80,10 @@ def _find_best_offer(item, total_amount):
     
     return best_offer
 
-def find_all_possible_offers(item, total_amount):
+def _find_all_possible_offers(item, total_amount):
     """
-    >>> find_all_possible_offers("A", 8)
-    [
-        OFFERS(item='A', amount=5, new_price=200),
-        OFFERS(item='A', amount=3, new_price=130)
-    ]
+    >>> _find_all_possible_offers("A", 8)
+    [OFFERS(item='A', amount=5, new_price=200), OFFERS(item='A', amount=3, new_price=130)]
     """
     offers = []
     while total_amount > 0:
@@ -94,12 +91,10 @@ def find_all_possible_offers(item, total_amount):
         if offer != None:
             offers.append(offer)
             total_amount -= offer.amount
+        else:
+            break
 
     return offers
-
-
-
-    pass
 
 def _extract_price(item, amount) -> int:
     """
@@ -122,11 +117,9 @@ def _extract_price(item, amount) -> int:
     200
 
     """
-
-
     discounted_price = 0
-    if (offer := _find_best_offer(item, amount)):
-        if item == offer.item:
+    if (offers := _find_all_possible_offers(item, amount)):
+        for offer in offers:
             if amount >= offer.amount:
                 # Divide to find out how many offers are possible
                 number_offers = floor(amount / offer.amount)
