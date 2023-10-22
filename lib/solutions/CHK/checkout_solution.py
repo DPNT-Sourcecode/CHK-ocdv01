@@ -56,12 +56,6 @@ def checkout(skus):
     item_counter = _apply_whole_cart_offers(item_counter)
 
     for item in item_counter:
-        for offer in WHOLE_OFFERS:
-            if item == offer.item and offer.free_item in item_counter:
-                # depending on how many
-                pass
-            
-
         total_price += _extract_price(item, item_counter[item])
 
     return total_price
@@ -98,7 +92,6 @@ def _extract_price(item, amount) -> int:
             for index, offer in enumerate(offers):
                 if index == 0:
                     best_offer = offer
-                
                 else:
                     if (
                         offer.amount > best_offer.amount
@@ -106,6 +99,7 @@ def _extract_price(item, amount) -> int:
                         best_offer = offer
 
                     remaining_amount = remaining_amount - best_offer.amount
+        
 
         return best_offer, remaining_amount
 
@@ -144,6 +138,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
