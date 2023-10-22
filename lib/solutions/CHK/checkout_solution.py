@@ -256,7 +256,10 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     """
     Removes items in sets of 3 if they are inside SPECIAL_OFFER_ITEMS
     >>> _apply_special_cart_offers(Counter({'X': 3, 'Y': 2, 'Z': 3}))
-    Counter({'X': 2})
+    (Counter({'X': 2}), 90)
+
+    >>> _apply_special_cart_offers(Counter({'Z': 2, 'A': 1}))
+    (Counter({'Z': 2, 'A': 1}), 0)
     """
     # Set a discount priority based on price
     special_offer_costs = 0
@@ -273,10 +276,10 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     if total_relevant_items < 3:
         return item_counter, special_offer_costs
     
-    while item_counter.total >= 3:
+    while total_relevant_items >= 3:
         for priority in ["top", "medium", "low"]:
             for item_label in SPECIAL_OFFERS_ITEMS:
-                    item_counter[item_label] -= 3
+                    total_relevant_items -= 3
 
     return (item_counter, special_offer_costs)
 
@@ -287,5 +290,6 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
