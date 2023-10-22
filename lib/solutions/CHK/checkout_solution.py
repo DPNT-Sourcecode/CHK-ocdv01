@@ -276,7 +276,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     if total_relevant_items < 3:
         return item_counter, special_offer_costs
 
-    def discount_total_relevant_items(item_counter, priority, total_relevant_items):
+    def discount_total_relevant_items(item_counter, priority, total_relevant_items, leftover_discounts=3):
         possible_discounts = floor(total_relevant_items / 3)
         applied_discounts = 0
         
@@ -288,18 +288,20 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
                     applied_discounts += 1
                     total_relevant_items -= 1
 
-                    if applied_discounts == 3:
-                        total_relevant_items -= 3
-                    else:
-                        total_relevant_items -= applied_discounts
-
-        return (item_counter, total_relevant_items, 3 - applied_discounts)
+        return (item_counter, total_relevant_items, applied_discounts)
     
     # While we have some items
     while total_relevant_items >= 3:
         # For each of the priorities
-        for priority in ["top", "medium", "low"]:
-            item_counter, total_relevant_items, leftover_discounts = discount_total_relevant_items(item_counter, priority, total_relevant_items)
+        applied_discounts = 0
+        while applied_discounts < 3:
+            for priority in ["top", "medium", "low"]:
+                leftover_discounts = 3 - applied_discounts
+                item_counter, total_relevant_items, applied_discounts = discount_total_relevant_items(
+                    item_counter,
+                    priority, total_relevant_items, 
+                    leftover_discounts
+                    )
 
 
     special_offer_costs = (original_total - total_relevant_items) * 45
@@ -308,6 +310,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
