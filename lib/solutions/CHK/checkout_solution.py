@@ -97,22 +97,22 @@ def checkout(skus):
 
     New offers work
     >>> checkout("KK")
-    150
+    120
 
     >>> checkout("KKNNNM")
-    270
+    240
 
     >>> checkout("KKNNNMM")
-    285
-
-    >>> checkout("KKNNNMM")
-    285
+    255
 
     >>> checkout("UUUU")
     120
 
     >>> checkout("VVVVV")
     220
+
+    >>> checkout("STXS")
+    65
 
     """
     total_price = 0
@@ -122,6 +122,7 @@ def checkout(skus):
         if item not in AVAILABLE_ITEMS.keys():
             return -1
 
+	item_counter = _apply_special_cart_offers(item_counter)
     item_counter = _apply_whole_cart_offers(item_counter)
 
     for item in item_counter:
@@ -247,8 +248,3 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
-
-
-
-
-
