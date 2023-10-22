@@ -74,9 +74,3 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
-
-
-
-
-
-
