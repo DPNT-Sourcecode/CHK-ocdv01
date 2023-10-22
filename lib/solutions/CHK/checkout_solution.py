@@ -34,24 +34,32 @@ AVAILABLE_ITEMS = {
 OFFERS = namedtuple("OFFERS",["item", "amount", "new_price"])
 
 offer1 = OFFERS("A", 3, 130)
-offer2 = OFFERS("B", 2, 45)
 offer3 = OFFERS("A", 5, 200)
+
+offer2 = OFFERS("B", 2, 45)
+
 offerh = OFFERS("H", 5, 45)
-offerk = OFFERS("K", 2, 150)
 offerh2 = OFFERS("H", 10, 80)
+
+offerk = OFFERS("K", 2, 120)
+
 offerp = OFFERS("P", 5, 200)
+
 offerq = OFFERS("Q", 3, 80)
+
 offerv = OFFERS("V", 2, 90)
 offerv2 = OFFERS("V", 3, 130)
 
 
-WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item", "min_same_item"])
-offer4 = WHOLE_CART_OFFERS("E", 2, "B", 0)
-offer5 = WHOLE_CART_OFFERS("F", 2, "F", 1)
-offern = WHOLE_CART_OFFERS("N", 3, "M", 1)
-offerr = WHOLE_CART_OFFERS("R", 3, "Q", 0)
-offeru = WHOLE_CART_OFFERS("U", 3, "U", 1)
+WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item"])
+offer4 = WHOLE_CART_OFFERS("E", 2, "B")
+offer5 = WHOLE_CART_OFFERS("F", 2, "F")
+offern = WHOLE_CART_OFFERS("N", 3, "M")
+offerr = WHOLE_CART_OFFERS("R", 3, "Q")
+offeru = WHOLE_CART_OFFERS("U", 3, "U")
 
+
+SPECIAL_OFFERS_ITEMS = {"S", "T", "X", "Y", "Z"}
 
 # APPEND OFFERS HERE
 SINGLE_OFFERS = [offer3, offer2, offer1, offerh, offerh2, offerp, offerq, offerv2, offerv, offerk]
@@ -239,6 +247,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
