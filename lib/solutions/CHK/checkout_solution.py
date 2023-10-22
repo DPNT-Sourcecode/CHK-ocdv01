@@ -21,7 +21,7 @@ AVAILABLE_ITEMS = {
     "P": 50,
     "Q": 30,
     "R": 50,
-    "S": 30,
+    "S": 20,
     "T": 20,
     "U": 40,
     "V": 50,
@@ -122,6 +122,11 @@ def checkout(skus):
     >>> checkout("STXSSTXS")
     124
 
+    >>> checkout("SSSZ")
+    65
+
+    >>> checkout("ABCDEFGHIJKLMNOPQRSTUVW")
+    795
     """
     total_price = 0
     item_counter = Counter(skus)
@@ -312,4 +317,5 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
