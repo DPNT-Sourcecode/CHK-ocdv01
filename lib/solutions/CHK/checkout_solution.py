@@ -13,9 +13,13 @@ OFFERS = namedtuple("OFFERS",["item", "amount", "new_price", "free_item"])
 
 offer1 = OFFERS("A", 3, 130, None)
 offer2 = OFFERS("B", 2, 45, None)
-offer3 = OFFERS("E", 2, 80, "B")
 
-ALL_OFFERS = [offer1, offer2]
+SINGLE_OFFERS = [offer1, offer2]
+
+WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item"])
+offer3 = WHOLE_CART_OFFERS("E", 2, "B")
+WHOLE_OFFERS = [offer3]
+
 
 # noinspection PyUnusedLocal
 # skus = unicode string
@@ -39,6 +43,8 @@ def checkout(skus):
     item_counter = Counter(skus)
     try:
         for item in item_counter:
+            if item in WHOLE_OFFERS:
+
             total_price += _extract_price(item, item_counter[item])
 
         return total_price
@@ -67,7 +73,7 @@ def _extract_price(item, amount) -> int:
         raise ValueError("Item not available, breaking cart")
     
     discounted_price = 0
-    for offer in ALL_OFFERS:
+    for offer in SINGLE_OFFERS:
         if item == offer.item:
             if amount >= offer.amount:
                 # Divide to find out how many offers are possible
@@ -81,3 +87,4 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
