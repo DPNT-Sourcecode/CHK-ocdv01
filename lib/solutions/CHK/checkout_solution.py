@@ -24,14 +24,11 @@ def checkout(skus):
     >>> checkout("A A B A")
     160
     """
-    print(skus)
     items = skus.split(" ")
-
     total_price = 0
-    item_amount = Counter(items)
-    breakpoint()
-    for item, amount in item_amount:
-        total_price += _extract_price(item, amount)
+    item_counter = Counter(items)
+    for item in item_counter:
+        total_price += _extract_price(item, item_counter[item])
 
     return total_price
         
@@ -71,6 +68,7 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
