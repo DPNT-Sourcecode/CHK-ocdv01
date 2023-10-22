@@ -61,6 +61,27 @@ def checkout(skus):
     return total_price
         
 
+# Find best offer for a particular amount:
+def _find_best_offer(item, total_amount):
+    """
+    >>> _find_best_offer("A", 5)
+    OFFERS(item='A', amount=5, new_price=200)
+    """
+    best_offer = None
+    offers = [offer for offer in SINGLE_OFFERS if offer.item == item and offer.amount < total_amount]
+    
+    if offers != []:
+        for index, offer in enumerate(offers):
+            if index == 0:
+                best_offer = offer
+            else:
+                if (
+                    offer.amount > best_offer.amount
+                    ):
+                    best_offer = offer
+    
+    return best_offer
+
 def _extract_price(item, amount) -> int:
     """
     Returns price for a given item in a given amount
@@ -82,29 +103,13 @@ def _extract_price(item, amount) -> int:
     200
 
     """
-    # Find best offer for a particular amount:
-    def __best_offer(item, total_amount):
-        best_offer = None
-        remaining_amount = total_amount
-        offers = [offer for offer in SINGLE_OFFERS if offer.item == item and offer.amount < total_amount]
-        
-        if offers != []:
-            for index, offer in enumerate(offers):
-                if index == 0:
-                    best_offer = offer
-                else:
-                    if (
-                        offer.amount > best_offer.amount
-                        ):
-                        best_offer = offer
 
-                    remaining_amount = remaining_amount - best_offer.amount
-        
 
-        return best_offer, remaining_amount
+    def __find_all_posible_offers(item, total_amount):
+        pass
 
     discounted_price = 0
-    if (offer := __best_offer(item, amount)):
+    if (offer := _find_best_offer(item, amount)):
         if item == offer.item:
             if amount >= offer.amount:
                 # Divide to find out how many offers are possible
@@ -138,6 +143,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
