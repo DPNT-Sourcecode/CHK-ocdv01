@@ -80,24 +80,30 @@ def _extract_price(item, amount) -> int:
     >>> _extract_price("A", 4)
     180
 
+    >>> _extract_price("A", 5)
+    200
+
     """
-    discounted_price = 0
     # Find best offer for a particular amount:
     def __best_offer(item):
-        offer_options = []
         for offer in SINGLE_OFFERS:
             if item == offer.item:
-                offer_options.append(offer)
+                if offer.amount > best_offer.amount:
+                    best_offer = offer
+                else:
+                    best_offer = offer
         
         return best_offer
 
-    for offer in SINGLE_OFFERS:
-        if item == offer.item:
-            if amount >= offer.amount:
-                # Divide to find out how many offers are possible
-                number_offers = floor(amount / offer.amount)
-                discounted_price += offer.new_price * number_offers
-                amount -= number_offers * offer.amount
+    offer = __best_offer(item)
+    discounted_price = 0
+
+    if item == offer.item:
+        if amount >= offer.amount:
+            # Divide to find out how many offers are possible
+            number_offers = floor(amount / offer.amount)
+            discounted_price += offer.new_price * number_offers
+            amount -= number_offers * offer.amount
 
     return amount * AVAILABLE_ITEMS[item] + discounted_price
     
@@ -125,6 +131,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
