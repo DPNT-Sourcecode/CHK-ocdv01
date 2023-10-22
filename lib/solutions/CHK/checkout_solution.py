@@ -9,10 +9,11 @@ AVAILABLE_ITEMS = {
     "E": 40,
 }
 
-OFFERS = namedtuple("OFFERS",["item", "amount", "new_price", "free_item"])
+OFFERS = namedtuple("OFFERS",["item", "amount", "new_price"])
 
-offer1 = OFFERS("A", 3, 130, None)
-offer2 = OFFERS("B", 2, 45, None)
+offer1 = OFFERS("A", 3, 130)
+offer2 = OFFERS("B", 2, 45)
+offer3 = OFFERS("A", 5, 200)
 
 SINGLE_OFFERS = [offer1, offer2]
 
@@ -81,6 +82,15 @@ def _extract_price(item, amount) -> int:
 
     """
     discounted_price = 0
+    # Find best offer for a particular amount:
+    def __best_offer(item):
+        offer_options = []
+        for offer in SINGLE_OFFERS:
+            if item == offer.item:
+                offer_options.append(offer)
+        
+        return best_offer
+
     for offer in SINGLE_OFFERS:
         if item == offer.item:
             if amount >= offer.amount:
@@ -115,6 +125,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
