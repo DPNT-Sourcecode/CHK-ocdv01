@@ -127,13 +127,13 @@ def checkout(skus):
         if item not in AVAILABLE_ITEMS.keys():
             return -1
         
-    item_counter = _apply_special_cart_offers(item_counter)
+    item_counter, special_offers_price = _apply_special_cart_offers(item_counter)
     item_counter = _apply_whole_cart_offers(item_counter)
 
     for item in item_counter:
         total_price += _extract_price(item, item_counter[item])
 
-    return total_price
+    return total_price + special_offers_price
         
 
 # Find best offer for a particular amount:
@@ -251,6 +251,19 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
     return item_counter
 
+
+def __discount_total_relevant_items(item_counter, priority, total_relevant_items, leftover_discounts=3):
+    applied_discounts = 3 - leftover_discounts
+    
+    for item_label in SPECIAL_DISCOUNT_PRIORITY[priority]:
+        if item_label in item_counter:
+            while (item_counter[item_label] > 0) and applied_discounts < 3:
+                item_counter[item_label] -= 1
+                applied_discounts += 1
+                total_relevant_items -= 1
+
+    return (item_counter, total_relevant_items, applied_discounts)
+
 def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     """
     Removes items in sets of 3 if they are inside SPECIAL_OFFER_ITEMS
@@ -270,24 +283,12 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
         item_counter["Y"] +
         item_counter["Z"] 
     )
-    breakpoint()
     original_total = total_relevant_items
     
     # Return immediately if too few items
     if total_relevant_items < 3:
         return item_counter, special_offer_costs
 
-    def discount_total_relevant_items(item_counter, priority, total_relevant_items, leftover_discounts=3):
-        applied_discounts = 3 - leftover_discounts
-        
-        for item_label in SPECIAL_DISCOUNT_PRIORITY[priority]:
-            if item_label in item_counter:
-                while (item_counter[item_label] > 0) and applied_discounts < 3:
-                    item_counter[item_label] -= 1
-                    applied_discounts += 1
-                    total_relevant_items -= 1
-
-        return (item_counter, total_relevant_items, applied_discounts)
     
     # While we have some items
     while total_relevant_items >= 3:
@@ -296,7 +297,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
         while applied_discounts < 3:
             for priority in ["top", "medium", "low"]:
                 leftover_discounts = 3 - applied_discounts
-                item_counter, total_relevant_items, applied_discounts = discount_total_relevant_items(
+                item_counter, total_relevant_items, applied_discounts = __discount_total_relevant_items(
                     item_counter,
                     priority, total_relevant_items, 
                     leftover_discounts
@@ -304,6 +305,8 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 
     special_offer_costs = (original_total - total_relevant_items) * 45
+    if special_offer_costs > 0:
+        breakpoint()
 
     return (item_counter, special_offer_costs)
 
