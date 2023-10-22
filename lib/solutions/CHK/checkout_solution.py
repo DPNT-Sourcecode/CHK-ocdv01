@@ -117,7 +117,10 @@ def checkout(skus):
     220
 
     >>> checkout("STXS")
-    65
+    62
+
+    >>> checkout("STXSSTXS")
+    124
 
     """
     total_price = 0
@@ -268,7 +271,7 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     """
     Removes items in sets of 3 if they are inside SPECIAL_OFFER_ITEMS
     >>> _apply_special_cart_offers(Counter({'X': 3, 'Y': 2, 'Z': 3}))
-    (Counter({'X': 2, 'Y': 0, 'Z': 0}}), 90)
+    (Counter({'X': 2, 'Y': 0, 'Z': 0}), 90)
 
     >>> _apply_special_cart_offers(Counter({'Z': 2, 'A': 1}))
     (Counter({'Z': 2, 'A': 1}), 0)
@@ -302,13 +305,11 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
                     priority, total_relevant_items, 
                     leftover_discounts
                     )
+            special_offer_costs += 45
 
-
-    special_offer_costs = (original_total - total_relevant_items) * 45
-    if special_offer_costs > 0:
-        breakpoint()
 
     return (item_counter, special_offer_costs)
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
