@@ -5,13 +5,15 @@ AVAILABLE_ITEMS = {
     "A": 50,
     "B": 30,
     "C": 20,
-    "D": 15
+    "D": 15,
+    "E": 40,
 }
 
-OFFERS = namedtuple("OFFERS",["item", "amount", "new_price"])
+OFFERS = namedtuple("OFFERS",["item", "amount", "new_price", "free_item"])
 
-offer1 = OFFERS("A", 3, 130)
-offer2 = OFFERS("B", 2, 45)
+offer1 = OFFERS("A", 3, 130, None)
+offer2 = OFFERS("B", 2, 45, None)
+offer3 = OFFERS("E", 2, 80, "B")
 
 ALL_OFFERS = [offer1, offer2]
 
@@ -27,6 +29,11 @@ def checkout(skus):
     Should break
     >>> checkout("ABCa")
     -1
+
+    Offers with remainders work
+    >>> checkout("EEB")
+    80
+    180
     """
     total_price = 0
     item_counter = Counter(skus)
