@@ -250,13 +250,24 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     """
     Removes items in sets of 3 if they are inside SPECIAL_OFFER_ITEMS
-    >>> _apply_special_cart_offers(Counter({'X': 3, 'Y': 2, 'Z'}))
-    Counter({'F': 3})
+    >>> _apply_special_cart_offers(Counter({'X': 3, 'Y': 2, 'Z': 3}))
+    Counter({'X': 2})
     """
     # Set a discount priority based on price
-    breakpoint()
     special_offer_costs = 0
-    discount_priority = {"top": {"Z"}, "medium": {"S", "T", "Y"}, "bottom": {"X"}}
+    discount_priority = {
+        "top": {"Z"}, 
+        "medium": {"S", "T", "Y"},
+        "bottom": {"X"}
+        }
+    
+    # Return immediately 
+    if item_counter.total() < 3:
+        return item_counter, special_offer_costs
+
+
+
+    breakpoint()
     return item_counter, special_offer_costs
 
 if __name__ == "__main__":
