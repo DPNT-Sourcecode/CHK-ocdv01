@@ -61,6 +61,11 @@ offeru = WHOLE_CART_OFFERS("U", 3, "U")
 
 
 SPECIAL_OFFERS_ITEMS = {"S", "T", "X", "Y", "Z"}
+SPECIAL_DISCOUNT_PRIORITY = {
+    "top": {"Z"}, 
+    "medium": {"S", "T", "Y"},
+    "low": {"X"}
+    }
 
 # APPEND OFFERS HERE
 SINGLE_OFFERS = [offer3, offer2, offer1, offerh, offerh2, offerp, offerq, offerv2, offerv, offerk]
@@ -255,15 +260,16 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
     """
     # Set a discount priority based on price
     special_offer_costs = 0
-    discount_priority = {
-        "top": {"Z"}, 
-        "medium": {"S", "T", "Y"},
-        "bottom": {"X"}
-        }
     
-    # Return immediately 
+    # Return immediately if too few items
     if item_counter.total() < 3:
         return item_counter, special_offer_costs
+    
+    for priority in ["top", "medium", "low"]:
+        for item_label in SPECIAL_OFFERS_ITEMS:
+                item_counter[item]
+
+    return item_counter, special_offer_costs
 
 
 
@@ -272,3 +278,4 @@ def _apply_special_cart_offers(item_counter) -> Tuple[Counter, int]:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
