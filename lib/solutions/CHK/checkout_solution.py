@@ -15,7 +15,7 @@ offer1 = OFFERS("A", 3, 130)
 offer2 = OFFERS("B", 2, 45)
 offer3 = OFFERS("A", 5, 200)
 
-SINGLE_OFFERS = [offer1, offer2, offer3]
+SINGLE_OFFERS = [offer3, offer2, offer1]
 
 WHOLE_CART_OFFERS = namedtuple("WCOFFERS",["item", "amount", "free_item"])
 offer3 = WHOLE_CART_OFFERS("E", 2, "B")
@@ -42,6 +42,9 @@ def checkout(skus):
     Discount twice at whole cart level
     >>> checkout("EEEEBB")
     160
+
+    >>> checkout("AAAAAEEBAAABB")
+    455
     """
     total_price = 0
     item_counter = Counter(skus)
@@ -88,7 +91,7 @@ def _extract_price(item, amount) -> int:
     # Find best offer for a particular amount:
     def __best_offer(item, total_amount):
         best_offer = None
-        offers = [offer for offer in SINGLE_OFFERS if offer.item == item]
+        offers = [offer for offer in SINGLE_OFFERS if offer.item == item and offer.amount < total_amount]
         
         if offers != []:
             for index, offer in enumerate(offers):
@@ -97,8 +100,7 @@ def _extract_price(item, amount) -> int:
                 
                 else:
                     if (
-                        offer.amount > best_offer.amount and 
-                        total_amount >= offer.amount
+                        offer.amount > best_offer.amount
                         ):
                         best_offer = offer
 
@@ -139,5 +141,6 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
