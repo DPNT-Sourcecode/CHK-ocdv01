@@ -80,24 +80,27 @@ def _extract_price(item, amount) -> int:
     >>> _extract_price("A", 4)
     180
 
+	New kind of discount which is a better offer
     >>> _extract_price("A", 5)
     200
 
     """
     # Find best offer for a particular amount:
     def __best_offer(item):
+        best_offer = None
         offers = [offer for offer in SINGLE_OFFERS if offer.item == item]
         
-        for offer in offers:
-            best_offer = offer.amount
-        
-        best_offer = offers[0]
-        
+        if offers != []:
+            for index, offer in enumerate(offers):
+                if index == 0:
+                    best_offer = offer
+                else:
+                    if offer.amount > best_offer.amount:
+                        best_offer = offer
+
         return best_offer
 
-    offer = __best_offer(item)
     discounted_price = 0
-
     if (offer := __best_offer(item)):
         if item == offer.item:
             if amount >= offer.amount:
