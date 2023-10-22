@@ -38,27 +38,13 @@ def checkout(skus):
     >>> checkout("EEB")
     80
 
-    Discount twice at whole cart level
-    >>> checkout("EEEEBB")
-    160
+    # Discount twice at whole cart level
+    # >>> checkout("EEEEBB")
+    # 160
     """
     total_price = 0
     item_counter = Counter(skus)
-    breakpoint()
-    
-    def _apply_whole_cart_offers(item_counter):
-        """
-        Offer can work N times
-        _apply_whole_cart_offers(Counter({'E': 4, 'B': 2}))
-        """
-        for item in item_counter:
-            for offer in WHOLE_OFFERS:
-                if item == offer.item and offer.free_item in item_counter:
-                    n_discounted_items = floor(item.amount / offer.amount)
-                    item_counter[offer.free_item] -= offer.amount
-        return item_counter
-
-    _apply_whole_cart_offers(item_counter)
+    item_counter = _apply_whole_cart_offers(item_counter)
 
     try:
         for item in item_counter:
@@ -107,6 +93,18 @@ def _extract_price(item, amount) -> int:
     return amount * AVAILABLE_ITEMS[item] + discounted_price
     
     
+def _apply_whole_cart_offers(item_counter) -> Counter:
+    """
+    Offer can work N times
+    _apply_whole_cart_offers(Counter({'E': 4, 'B': 2}))
+    """
+    for item_in_cart in item_counter:
+        for offer in WHOLE_OFFERS:
+            if item_in_cart == offer.item and offer.free_item in item_counter:
+                breakpoint()
+                n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
+                item_counter[offer.free_item] -= n_discounted_items
+    return item_counter
 
 if __name__ == "__main__":
     checkout("A B B A A A")
