@@ -1,4 +1,4 @@
-from collections import namedtuple
+from collections import namedtuple, Counter
 from math import floor
 
 AVAILABLE_ITEMS = {
@@ -18,12 +18,23 @@ ALL_OFFERS = [offer1, offer2]
 # noinspection PyUnusedLocal
 # skus = unicode string
 def checkout(skus):
+    """
+    Perform checkout
+
+    >>> checkout("A A B A")
+    160
+    """
     print(skus)
     items = skus.split(" ")
 
-    for item in items:
-        if item not in AVAILABLE_ITEMS.keys():
-            return -1
+    total_price = 0
+    item_amount = Counter(items)
+    breakpoint()
+    for item, amount in item_amount:
+        total_price += _extract_price(item, amount)
+
+    return total_price
+        
 
 def _extract_price(item, amount) -> int:
     """
@@ -60,5 +71,6 @@ def _extract_price(item, amount) -> int:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
