@@ -12,7 +12,7 @@ AVAILABLE_ITEMS = {
     "H": 10,
     "I": 35,
     "J": 60,
-    "K": 80,
+    "K": 70,
     "L": 90,
     "M": 15,
     "N": 40,
@@ -25,9 +25,9 @@ AVAILABLE_ITEMS = {
     "U": 40,
     "V": 50,
     "W": 20,
-    "X": 90,
-    "Y": 10,
-    "Z": 50
+    "X": 17,
+    "Y": 20,
+    "Z": 21,
 
 }
 
@@ -121,8 +121,8 @@ def checkout(skus):
     for item in item_counter:
         if item not in AVAILABLE_ITEMS.keys():
             return -1
-
-	item_counter = _apply_special_cart_offers(item_counter)
+        
+    # item_counter = _apply_special_cart_offers(item_counter)
     item_counter = _apply_whole_cart_offers(item_counter)
 
     for item in item_counter:
@@ -245,6 +245,15 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
                     
 
     return item_counter
+
+# def _apply_special_cart_offers(item_counter) -> tuple(Counter, int):
+#     """
+#     Removes items in sets of 3 if they are inside SPECIAL_OFFER_ITEMS
+#     >>> _apply_special_cart_offers()
+#     >>> _apply_special_cart_offers(Counter({'X': 3, 'Y': 2, 'Z'}))
+#     Counter({'F': 3})
+#     """
+#     return item_counter, special_offer_costs
 
 if __name__ == "__main__":
     checkout("A B B A A A")
