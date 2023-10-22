@@ -68,19 +68,20 @@ def _find_best_offer(item, total_amount):
     OFFERS(item='A', amount=5, new_price=200)
     """
     best_offer = None
-    offers = [offer for offer in SINGLE_OFFERS if offer.item == item and offer.amount < total_amount]
+    offers = [offer for offer in SINGLE_OFFERS if offer.item == item and offer.amount <= total_amount]
     
     if offers != []:
         for index, offer in enumerate(offers):
             if index == 0:
                 best_offer = offer
             else:
-                if (
-                    offer.amount > best_offer.amount
-                    ):
+                if ( offer.amount >= best_offer.amount):
                     best_offer = offer
     
     return best_offer
+
+def __find_all_posible_offers(item, total_amount):
+    pass
 
 def _extract_price(item, amount) -> int:
     """
@@ -104,9 +105,6 @@ def _extract_price(item, amount) -> int:
 
     """
 
-
-    def __find_all_posible_offers(item, total_amount):
-        pass
 
     discounted_price = 0
     if (offer := _find_best_offer(item, amount)):
@@ -143,6 +141,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
