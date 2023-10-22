@@ -44,6 +44,11 @@ def checkout(skus):
     """
     total_price = 0
     item_counter = Counter(skus)
+    
+    for item in item_counter:
+        if item not in AVAILABLE_ITEMS.keys():
+            return -1
+
     item_counter = _apply_whole_cart_offers(item_counter)
 
     try:
@@ -96,18 +101,23 @@ def _extract_price(item, amount) -> int:
 def _apply_whole_cart_offers(item_counter) -> Counter:
     """
     Offer can work N times
-    _apply_whole_cart_offers(Counter({'E': 4, 'B': 2}))
+    >>> _apply_whole_cart_offers(Counter({'E': 4, 'B': 2}))
+    Counter({"E": 4, "B": 0})
+
+	Does not go below 0
+    >>> _apply_whole_cart_offers(Counter({'E': 4, 'B': 1}))
+    Counter({"E": 4, "B": 0})
     """
     for item_in_cart in item_counter:
         for offer in WHOLE_OFFERS:
             if item_in_cart == offer.item and offer.free_item in item_counter:
-                breakpoint()
                 n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
                 item_counter[offer.free_item] -= n_discounted_items
     return item_counter
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
