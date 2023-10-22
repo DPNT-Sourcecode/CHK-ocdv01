@@ -157,13 +157,15 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
     >>> _apply_whole_cart_offers(Counter({'F': 2}))
     Counter({'F': 2})
 
-	6 Fs
-    >>> _apply_whole_cart_offers(Counter({'F': 6}))
-    Counter({'F': 4})
+	4 Fs
+    >>> _apply_whole_cart_offers(Counter({'F': 4}))
+    Counter({'F': 3})
     """
+
     for item_in_cart in item_counter:
         for offer in WHOLE_OFFERS:
             if item_in_cart == offer.item and offer.free_item in item_counter:
+                # Handles same-item offers by updating
                 if offer.min_same_item <= item_counter[item_in_cart]:
                     n_discounted_items = floor(item_counter[item_in_cart] / offer.amount)
 
@@ -175,6 +177,7 @@ def _apply_whole_cart_offers(item_counter) -> Counter:
 
 if __name__ == "__main__":
     checkout("A B B A A A")
+
 
 
 
